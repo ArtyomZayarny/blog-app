@@ -6,8 +6,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.posts {
+  max-width:500px;
+}
+small {
+  display: block;
+  text-align: right;
+  padding-right: 5px;
+}
+.select {
+  background-color: cadetblue;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
 }
