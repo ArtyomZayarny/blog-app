@@ -1,21 +1,24 @@
 import React from 'react';
 import Comments from './Comments'
+import AuthorInfo from './AuthorInfo'
 
 const Post = (props) => {
     console.log(props)
- const {id,title,body,user} = props.post;
- const {selectPost,selected} = props;
-
+ const {selectPost,selected, post} = props;
+ const id = post.id;
+ const title = post.title;
+ const body = post.body;
  const active  = selected === id ? 'select' : ''
     return (
         <div
-        className={active}
-        onClick = {() => selectPost(id)}
-        >
+            className={active}
+             onClick = {() => selectPost(id,post.user)}
+            >
             <h3>{title}</h3>
             {active && <p>{body}</p>}
-            {active && <small>{user.name}</small>}
-            {active && <Comments />}
+            {active && <small>{post.user.name}</small>}
+             {active && <Comments />}
+            {/* {active && <AuthorInfo user={user}/>} */}
         </div>
     );
     }

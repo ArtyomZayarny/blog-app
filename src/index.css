@@ -20,3 +20,7 @@ small {
   border-radius: 5px;
   padding: 5px;
 }
+.blog {
+  display: grid;
+  grid-template-columns: 500px 500px;
+}

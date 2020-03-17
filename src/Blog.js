@@ -9,21 +9,32 @@ class Blog extends Component {
   state = {
     posts:[],
     loading:true,
-    curretPost:'',
+    currentPost:'',
+    currentAuthor:''
   }
   componentDidMount(){  
     fetch('https://jsonplaceholder.typicode.com/posts')
     .then(response => response.json())
     .then( data =>  {
       let posts = data.map( (post) => {
-        fetch(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
+        let userID = post.userId;
+        let postID = post.id;
+        {/*FETCH USERS */}
+        fetch(`https://jsonplaceholder.typicode.com/users/${userID}`)
         .then(response => response.json())
         .then( userInfo =>  {
-          if (post.userId === userInfo.id) {
+          if (userID === userInfo.id) {
             let {id, ...rest} = userInfo;
             post['user'] = rest;
           }
         })
+        /*FETCH COMMENTS */
+        fetch(`https://jsonplaceholder.typicode.com/posts/${postID}/comments`)
+        .then(response => response.json())
+        .then( comments =>  {
+            post['comments'] = comments;
+        })
+
         return post
       })
       this.setState({
@@ -32,18 +43,20 @@ class Blog extends Component {
       })
     })
  }
- selectPost = (id) => {
+ selectPost = (id,user) => {
       this.setState({
-        current:id
+        currentPost:id,
+        currentAuthor:user
       })
  }
  renderPosts = (posts) => {
    return posts.map( (post) => {
      return (
-       <Post  key={post.id}
-              post={post}
-              selected={this.state.current}
-              selectPost={this.selectPost}
+       <Post  
+            key={post.id}
+            post={post}
+            selected={this.state.currentPost}
+            selectPost={this.selectPost}
               />
      )
    })
@@ -57,7 +70,9 @@ class Blog extends Component {
           <h2>Posts</h2>
           {this.renderPosts(this.state.posts)}
         </div> }
-        <AuthorInfo />
+        <div className="author">
+           <AuthorInfo user={this.state.currentUser}/>
+        </div>
       </div>
     );
   }
