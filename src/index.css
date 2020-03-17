@@ -21,6 +21,33 @@ small {
   padding: 5px;
 }
 .blog {
+  padding:30px;
   display: grid;
   grid-template-columns: 500px 500px;
+}
+.author {
+  margin-top: 70px;
+  position: fixed;
+  padding: 15px;
+  border-radius: 10px;
+  left: 500px;
+  margin-left: 50px;
+  background-color: #ccc;
+}
+span.title {
+  font-weight: 600;
+}
+.auth-comment {
+  display: flex;
+  justify-content:space-between;
+}
+.comments-btn, .posts h3 {
+  cursor:pointer;
+}
+.comment-row p {
+  margin-top: 5px;
+}
+
+.comment-row h4 {
+  margin: 0;
 }

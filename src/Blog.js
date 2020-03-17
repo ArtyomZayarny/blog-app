@@ -9,7 +9,7 @@ class Blog extends Component {
   state = {
     posts:[],
     loading:true,
-    currentPost:'',
+    currentPost:null,
     currentAuthor:''
   }
   componentDidMount(){  
@@ -70,9 +70,7 @@ class Blog extends Component {
           <h2>Posts</h2>
           {this.renderPosts(this.state.posts)}
         </div> }
-        <div className="author">
-           <AuthorInfo user={this.state.currentUser}/>
-        </div>
+        {this.state.currentAuthor !== '' && <AuthorInfo user={this.state.currentAuthor} />}
       </div>
     );
   }
