@@ -19,7 +19,7 @@ render() {
     return (
         <div
             className={active}
-             onClick = {() => selectPost(id,this.props.post.user)}
+             onClick = {() => selectPost(id,this.props.post.user,this.props.post.albums)}
             >
             <h3>{title}</h3>
             {active && <p>{body}</p>}

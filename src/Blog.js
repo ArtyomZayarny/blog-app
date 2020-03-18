@@ -34,7 +34,13 @@ class Blog extends Component {
         .then( comments =>  {
             post['comments'] = comments;
         })
-
+        /*FETCH ALBUMS */
+        fetch(`https://jsonplaceholder.typicode.com/users/${userID}/albums`)
+        .then(response => response.json())
+        .then( albumsData =>  {
+            let albums =  albumsData.filter( album  => album.userId === userID);
+              post['albums'] = albums;     
+        })
         return post
       })
       this.setState({
@@ -43,10 +49,11 @@ class Blog extends Component {
       })
     })
  }
- selectPost = (id,user) => {
+ selectPost = (id,user,albums) => {
       this.setState({
         currentPost:id,
-        currentAuthor:user
+        currentAuthor:user,
+        currentAuthorAlbums:albums
       })
  }
  renderPosts = (posts) => {
@@ -62,6 +69,7 @@ class Blog extends Component {
    })
  }
   render() {
+   
     return (
       <div className="blog">
         {this.state.loading ? 
@@ -70,7 +78,11 @@ class Blog extends Component {
           <h2>Posts</h2>
           {this.renderPosts(this.state.posts)}
         </div> }
-        {this.state.currentAuthor !== '' && <AuthorInfo user={this.state.currentAuthor} />}
+        {this.state.currentAuthor !== '' && 
+                          <AuthorInfo
+                               albums={this.state.currentAuthorAlbums}
+                              user={this.state.currentAuthor} 
+                          />}
       </div>
     );
   }
