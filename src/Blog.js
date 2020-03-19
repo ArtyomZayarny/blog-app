@@ -9,8 +9,7 @@ class Blog extends Component {
   state = {
     posts:[],
     loading:true,
-    currentPost:null,
-    currentAuthor:''
+    currentAuthorId:''
   }
   componentDidMount(){  
     fetch('https://jsonplaceholder.typicode.com/posts')
@@ -19,28 +18,28 @@ class Blog extends Component {
       let posts = data.map( (post) => {
         let userID = post.userId;
         let postID = post.id;
-        {/*FETCH USERS */}
-        fetch(`https://jsonplaceholder.typicode.com/users/${userID}`)
-        .then(response => response.json())
-        .then( userInfo =>  {
-          if (userID === userInfo.id) {
-            let {id, ...rest} = userInfo;
-            post['user'] = rest;
-          }
-        })
-        /*FETCH COMMENTS */
-        fetch(`https://jsonplaceholder.typicode.com/posts/${postID}/comments`)
-        .then(response => response.json())
-        .then( comments =>  {
-            post['comments'] = comments;
-        })
-        /*FETCH ALBUMS */
-        fetch(`https://jsonplaceholder.typicode.com/users/${userID}/albums`)
-        .then(response => response.json())
-        .then( albumsData =>  {
-            let albums =  albumsData.filter( album  => album.userId === userID);
-              post['albums'] = albums;     
-        })
+        // {/*FETCH USERS */}
+        // fetch(`https://jsonplaceholder.typicode.com/users/${userID}`)
+        // .then(response => response.json())
+        // .then( userInfo =>  {
+        //   if (userID === userInfo.id) {
+        //     let {id, ...rest} = userInfo;
+        //     post['user'] = rest;
+        //   }
+        // })
+        // /*FETCH COMMENTS */
+        // fetch(`https://jsonplaceholder.typicode.com/posts/${postID}/comments`)
+        // .then(response => response.json())
+        // .then( comments =>  {
+        //     post['comments'] = comments;
+        // })
+        // /*FETCH ALBUMS */
+        // fetch(`https://jsonplaceholder.typicode.com/users/${userID}/albums`)
+        // .then(response => response.json())
+        // .then( albumsData =>  {
+        //     let albums =  albumsData.filter( album  => album.userId === userID);
+        //       post['albums'] = albums;     
+        // })
         return post
       })
       this.setState({
@@ -49,11 +48,9 @@ class Blog extends Component {
       })
     })
  }
- selectPost = (id,user,albums) => {
+ selectPost = (userId) => {
       this.setState({
-        currentPost:id,
-        currentAuthor:user,
-        currentAuthorAlbums:albums
+        currentAuthorId:userId 
       })
  }
  renderPosts = (posts) => {
@@ -78,11 +75,7 @@ class Blog extends Component {
           <h2>Posts</h2>
           {this.renderPosts(this.state.posts)}
         </div> }
-        {this.state.currentAuthor !== '' && 
-                          <AuthorInfo
-                               albums={this.state.currentAuthorAlbums}
-                              user={this.state.currentAuthor} 
-                          />}
+        {this.state.currentAuthorId !== '' && <AuthorInfo authorId={this.state.currentAuthorId} />}
       </div>
     );
   }

@@ -14,12 +14,12 @@ class Post extends Component {
     
 
 render() {
-    const {selectPost,selected, post:{id,title,body,comments}} = this.props;
+    const {selectPost,selected, post:{id,title,body,userId,comments}} = this.props;
     const active  = selected === id ? 'select' : '';
     return (
         <div
             className={active}
-             onClick = {() => selectPost(id,this.props.post.user,this.props.post.albums)}
+             onClick = {() => selectPost(id,userId)}
             >
             <h3>{title}</h3>
             {active && <p>{body}</p>}
