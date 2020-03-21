@@ -11,26 +11,25 @@ class Post extends Component {
             showComments:false
         }
     }
-    
 
 render() {
-    const {selectPost,selected, post:{id,title,body,userId,comments}} = this.props;
+    const {onSelectPost,selected,currentAuthorName, post:{id,title,body,userId}} = this.props;
     const active  = selected === id ? 'select' : '';
+
     return (
         <div
             className={active}
-             onClick = {() => selectPost(id,userId)}
+             onClick = {() => onSelectPost(id,userId)}
             >
             <h3>{title}</h3>
             {active && <p>{body}</p>}
             {active && <p className="auth-comment">
-                        <small 
-                            className="comments-btn"
+                        { <small className="comments-btn"
                             onClick={() => {this.setState({showComments:!this.state.showComments}) }}
-                            >comments ({comments.length})</small>
-                        <small>{this.props.post.user.name}</small>
+                            >comments </small> }
+                        {<small>{currentAuthorName}</small> }  
                     </p>}
-             { this.state.showComments && <Comments comments={comments}/>}
+             { this.state.showComments && <Comments postId={id} getCommentsLength={this.getCommentsLength}/>}
         </div>
     );
     }
@@ -39,7 +38,7 @@ render() {
 Post.propTypes = {
     post:PropTypes.object.isRequired,
     selected:PropTypes.number,
-    selectPost:PropTypes.func.isRequired
+    onSelectPost:PropTypes.func.isRequired
 }
 
 export default Post;

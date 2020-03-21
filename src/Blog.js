@@ -1,81 +1,43 @@
 import React,{Component} from 'react';
-import Post from './components/Post'
 import AuthorInfo from './components/AuthorInfo'
 import Loading from './components/Loading'
-
+import PostsList from './components/PostsList'
 
 class Blog extends Component {
 
   state = {
-    posts:[],
-    loading:true,
-    currentAuthorId:''
+    currentAuthorId:null,
+    currentPostId:null,
+    currentAuthorName:''
   }
-  componentDidMount(){  
-    fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then( data =>  {
-      let posts = data.map( (post) => {
-        let userID = post.userId;
-        let postID = post.id;
-        // {/*FETCH USERS */}
-        // fetch(`https://jsonplaceholder.typicode.com/users/${userID}`)
-        // .then(response => response.json())
-        // .then( userInfo =>  {
-        //   if (userID === userInfo.id) {
-        //     let {id, ...rest} = userInfo;
-        //     post['user'] = rest;
-        //   }
-        // })
-        // /*FETCH COMMENTS */
-        // fetch(`https://jsonplaceholder.typicode.com/posts/${postID}/comments`)
-        // .then(response => response.json())
-        // .then( comments =>  {
-        //     post['comments'] = comments;
-        // })
-        // /*FETCH ALBUMS */
-        // fetch(`https://jsonplaceholder.typicode.com/users/${userID}/albums`)
-        // .then(response => response.json())
-        // .then( albumsData =>  {
-        //     let albums =  albumsData.filter( album  => album.userId === userID);
-        //       post['albums'] = albums;     
-        // })
-        return post
-      })
+
+ onSelectPost = (id,userId) => {
       this.setState({
-        posts:posts,
-        loading:false
+        currentAuthorId:userId,
+        currentPostId:id 
       })
+ }
+ getAuthorName = (name) => {
+    this.setState({
+      currentAuthorName:name
     })
  }
- selectPost = (userId) => {
-      this.setState({
-        currentAuthorId:userId 
-      })
- }
- renderPosts = (posts) => {
-   return posts.map( (post) => {
-     return (
-       <Post  
-            key={post.id}
-            post={post}
-            selected={this.state.currentPost}
-            selectPost={this.selectPost}
-              />
-     )
-   })
- }
+
   render() {
-   
+ //  console.log(this.state.currentPostId)
     return (
       <div className="blog">
         {this.state.loading ? 
                <Loading />  :
         <div className="posts">
           <h2>Posts</h2>
-          {this.renderPosts(this.state.posts)}
+          <PostsList 
+              onSelectPost={this.onSelectPost}
+              currentPostId={this.state.currentPostId}
+              currentAuthorName={this.state.currentAuthorName}
+              />
         </div> }
-        {this.state.currentAuthorId !== '' && <AuthorInfo authorId={this.state.currentAuthorId} />}
+        {this.state.currentAuthorId !== null && <AuthorInfo authorId={this.state.currentAuthorId} getAuthorName={this.getAuthorName}/>}
       </div>
     );
   }

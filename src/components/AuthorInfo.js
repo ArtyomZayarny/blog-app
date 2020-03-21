@@ -6,39 +6,69 @@ class AuthorInfo extends Component {
     constructor(props){
         super(props)
 
-    }
-    componentDidUpdate(){
-        
-    }
-    // const{
-    //     name,
-    //     email,
-    //     phone
-    // } = props.user;
-// let albums = [...props.albums];
+        this.state = {
+                user:[],
+                albums:[]
+        }
 
-// let albumsList = albums.map( (album) => {
-//     return (
-//     <li key={album.title} >{album.title}</li>
-//     )
-// });
+    }
+    componentDidMount(){
+        {/*FETCH USERS */}
+        fetch(`https://jsonplaceholder.typicode.com/users/${this.props.authorId}`)
+        .then(response => response.json())
+        .then( user =>  {
+            this.setState({user})
+            this.props.getAuthorName(user.name)
+        })
+
+        {/* FETCH ALBUMS */}
+        fetch(`https://jsonplaceholder.typicode.com/users/${this.props.authorId}/albums`)
+        .then(response => response.json())
+        .then( albums =>  {
+            this.setState({albums})     
+        })
+    }
+    componentDidUpdate(prevProps){
+        if(this.props.authorId !== prevProps.authorId) {
+            fetch(`https://jsonplaceholder.typicode.com/users/${this.props.authorId}`)
+            .then(response => response.json())
+            .then( user =>  {
+              this.setState({user})
+              this.props.getAuthorName(user.name)
+            })
+
+            fetch(`https://jsonplaceholder.typicode.com/users/${this.props.authorId}/albums`)
+            .then(response => response.json())
+            .then( albums =>  {
+               this.setState({albums})     
+            })
+}
+        }
+        
 render() {
+    const user = this.state.user;
+    let albumsList = this.state.albums.map( (album) => {
+        return (
+        <li key={album.title} >{album.title}</li>
+        )
+    });
     return (
         <div className="author">
-            <h3>Athor: -</h3>
-            <p><span className="title" >E-mail: </span><span>-</span></p>
-            <p><span className="title" >Phone: </span><span>-</span></p>
-            {/* <h3 className="album-title">{name} albums</h3>
+            <h3>Athor: {user.name}</h3>
+            <p><span className="title" >E-mail: </span><span>{user.email}</span></p>
+            <p><span className="title" >Phone: </span><span>{user.phone}</span></p>
+            <h3 className="album-title">{user.name} albums</h3>
             <ul>
                {albumsList}
-            </ul> */}
+            </ul>
         </div>
     );
 };
 }
     
 AuthorInfo.propTypes = {
-    //user:PropTypes.object.isRequired
+    user:PropTypes.object,
+    authorId:PropTypes.number.isRequired
 }
 
 export default AuthorInfo;
